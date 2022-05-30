@@ -48,9 +48,10 @@ main,
 }
 
 .table1 {
-    width: 400px;
+    width: 350px;
     height: 300px;
     margin: 40px auto;
+    text-align: center;
     background-color: #db7272;
     border-width: 2px;
     border-color: black;
@@ -59,9 +60,10 @@ main,
 }
 
 .table2 {
-    width: 400px;
+    width: 350px;
     height: 300px;
     margin: 10px auto;
+    text-align: center;
     background-color: #db7272;
     border-width: 2px;
     border-color: black;
