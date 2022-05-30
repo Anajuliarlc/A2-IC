@@ -52,39 +52,19 @@ main,
     height: 300px;
     margin: 40px auto;
     background-color: #496edf;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 20px;
 }
 
 .table2 {
     width: 400px;
     height: 300px;
-    margin: 40px auto;
+    margin: 0 auto;
     background-color: #496edf;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 20px;
 }
-
-
-/*main,
-.moeda {
-    width: 500px;
-    height: 400px;
-    margin: 50px auto;
-    background-color: #496edf;
-}
-
-table,
-.table1 {
-    width: 50%;
-    height: 50%;
-    margin-left: 20px;
-    text-align: center;
-    font-size: 25px;
-    font-family: "Courier New";
-}
-
-.acao {
-    width: 300px;
-    height: 250px;
-    margin: 50px auto;
-    background-color: #9CA6C6;
-}
-
-*/
