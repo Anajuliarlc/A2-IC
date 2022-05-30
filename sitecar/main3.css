@@ -1,0 +1,75 @@
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+}
+
+ul {
+    padding: 0px !important;
+}
+
+.menu-principal {
+    width: 100%;
+    background-color: #9CA6C6;
+    height: 60px;
+}
+
+main,
+.content {
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+}
+
+.content {
+    float: left;
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 30% !important;
+}
+
+.logo {
+    float: left;
+    padding: 10px;
+    width: 50%;
+}
+
+.carteiras ul li {
+    margin-left: 15px;
+    display: inline-block;
+    list-style: none;
+}
+
+.carteiras {
+    width: 40%;
+    float: right;
+}
+
+
+/*
+main,
+.moeda {
+    width: 500px;
+    height: 400px;
+    margin: 50px auto;
+    background-color: #496edf;
+}
+
+table,
+.table1 {
+    width: 50%;
+    height: 50%;
+    margin-left: 20px;
+    text-align: center;
+    font-size: 25px;
+    font-family: "Courier New";
+}
+
+.acao {
+    width: 300px;
+    height: 250px;
+    margin: 50px auto;
+    background-color: #9CA6C6;
+}
+*/
