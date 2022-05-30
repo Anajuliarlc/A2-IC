@@ -47,7 +47,7 @@ for row in table_class_moedas.tbody.find_all("tr"):  # em html uma linha da tabe
         quantidade = columns[1].text.strip(" ")
         df_moedas = pd.concat([df_moedas, pd.DataFrame.from_records([{"Moedas": moeda, "Valor": quantidade}])], ignore_index=True)
 df_moedas.head(num_linhas_moedas)
-
+print(df_moedas.head(num_linhas_moedas))
 # Refatorando o dataframe
 
     #Ações
@@ -61,7 +61,7 @@ df_acoes.head(num_linhas_acoes)
     # Moeda
 df_moedas["Moeda"] = df_moedas["Moeda"].str.upper()
         # Valor
-df_moedas["Valor"] = [x.replace(',', '.') for x in df_acoes["Valor"]]
+df_moedas["Valor"] = [x.replace(',', '.') for x in df_moedas["Valor"]]
 df_moedas = df_acoes.astype({"Valor": float})
 
 df_acoes.head(num_linhas_moedas)
