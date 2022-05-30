@@ -32,11 +32,11 @@ main,
 .logo {
     float: left;
     padding: 10px;
-    width: 50%;
+    width: 0%;
 }
 
 .carteiras ul li {
-    margin-left: 15px;
+    margin-left: 40px;
     display: inline-block;
     list-style: none;
 }
@@ -44,11 +44,11 @@ main,
 .carteiras {
     width: 40%;
     float: right;
+    padding: 0 auto;
 }
 
 
-/*
-main,
+/*main,
 .moeda {
     width: 500px;
     height: 400px;
@@ -72,4 +72,5 @@ table,
     margin: 50px auto;
     background-color: #9CA6C6;
 }
+
 */
