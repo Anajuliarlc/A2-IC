@@ -31,11 +31,11 @@ num_linhas_moedas = len(table_class_moedas.tbody.find_all("tr")) #némero de lin
         #Obtendo todas as linhas da tabela moedas
 for row in table_class_acoes.tbody.find_all("tr"):
     # Obtendo todas as colunas em cada linha
-    columns = row.find_all("td")  # em html uma coluna da tabela é representada pela tag <td>
-    if (columns != []):
-        acao = columns[0].text.strip(" ")
-        capital = columns[1].text.strip(" ")
-        df_acoes = pd.concat([df_acoes, pd.DataFrame.from_records([{"Ação": acao, "Capital": capital}])], ignore_index=True)
+    columns_acoes = row.find_all("td")  # em html uma coluna da tabela é representada pela tag <td>
+    if (columns_acoes != []):
+        acao = columns_acoes[0].text.strip(" ")
+        valor = columns_acoes[1].text.strip(" ")
+        df_acoes = pd.concat([df_acoes, pd.DataFrame.from_records([{"Ação": acao, "Valor": valor}])], ignore_index=True)
 df_acoes.head(num_linhas_acoes)
 
     # Obtendo todas as linhas da tabela acoes
@@ -62,9 +62,9 @@ df_acoes.head(num_linhas_acoes)
 df_moedas["Moeda"] = df_moedas["Moeda"].str.upper()
         # Valor
 df_moedas["Valor"] = [x.replace(',', '.') for x in df_moedas["Valor"]]
-df_moedas = df_acoes.astype({"Valor": float})
+df_moedas = df_moedas.astype({"Valor": float})
 
-df_acoes.head(num_linhas_moedas)
+df_acoes.head(num_linhas_acoes)
 
 
 
