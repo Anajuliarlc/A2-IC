@@ -59,4 +59,10 @@ df_moeda = df_moeda.astype({"Quantidade por tipo": float})
 
 df_moeda.head(num_linhas_moeda)
 
-print(df_moeda.head(num_linhas_moeda))
+#print(df_moeda.head(num_linhas_moeda))
+
+print(df_moeda["Moeda"])
+print(type(df_moeda["Moeda"]))
+print(df_moeda["Moeda"][0])
+for item in df_moeda["Moeda"]:
+    print(item)

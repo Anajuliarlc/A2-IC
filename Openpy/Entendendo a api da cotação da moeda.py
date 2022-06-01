@@ -1,10 +1,14 @@
+import requests
+import pandas as pd
+from datetime import datetime
+
 from bs4 import BeautifulSoup #Biblioteca para achar tags html, depois vamos colocar num dataframe do pandas
 import pandas as pd #Biblioteca para guardar data frame
 import requests #Biblioteca para extrair uma URL
 
 #WebScraping
 #Url do html
-url = "https://zuilhose.github.io/A2-Intro-Comp/"
+url = "https://atronee.github.io/A2-IC-Python/"
 # Obtendo o conteúdo da página em formato de texto
 
 data = requests.get(url).text
@@ -60,3 +64,29 @@ df_moeda = df_moeda.astype({"Quantidade por tipo": float})
 df_moeda.head(num_linhas_moeda)
 
 print(df_moeda.head(num_linhas_moeda))
+
+#Conseguindo as moedas na tabela
+print(pd.DataFrame.from_records([{"Moeda": moeda}]))
+num_moedas_linhas = len(df_moeda["Moeda"])
+moedas_converter = []
+for coin in df_moeda["Moeda"]:
+    moedas_converter.append(f"{coin}-BRL")
+
+print(moedas_converter)
+adicao_url = ",".join(moedas_converter)
+print(adicao_url)
+
+requisecao = requests.get(f"https://economia.awesomeapi.com.br/last/{adicao_url}")
+
+requisicao_dic = requisecao.json()
+cotacao_dolar = requisicao_dic["USDBRL"]["bid"]
+cotacao_euro = requisicao_dic["EURBRL"]["bid"]
+cotacao_cny = requisicao_dic["CNYBRL"]["bid"]
+
+tabela = pd.read_excel("carteira.xlxs")
+tabela.loc[0, "Cotação"] = float(cotacao_dolar)
+tabela.loc[1, "Cotação"] = float(cotacao_euro)
+tabela.loc[2, "Cotação"] = float(cotacao_cny)
+tabela.to_excel("carteira.xlxs", index=False)
+#print(f"Cotação atualizada. {datetime.now()}")
+
