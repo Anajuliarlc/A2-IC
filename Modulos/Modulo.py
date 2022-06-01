@@ -10,6 +10,6 @@ def criarqrcode(valor, numcarteira):
     # refinei o texto que será exibido no qrcode
 
     imagem = qrcode.make(carteira)
-    imagem.save(f'../Imagens/Qrcode{numcarteira}.png')
+    imagem.save(f'../Imagens/Qrcode/Qrcode{numcarteira}.png')
 
     # aqui a imagem será salva na pasta do projeto
