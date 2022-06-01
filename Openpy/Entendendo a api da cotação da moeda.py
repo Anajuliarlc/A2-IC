@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 from datetime import datetime
-
+import openpyxl
 from bs4 import BeautifulSoup #Biblioteca para achar tags html, depois vamos colocar num dataframe do pandas
 import pandas as pd #Biblioteca para guardar data frame
 import requests #Biblioteca para extrair uma URL
@@ -79,14 +79,12 @@ print(adicao_url)
 requisecao = requests.get(f"https://economia.awesomeapi.com.br/last/{adicao_url}")
 
 requisicao_dic = requisecao.json()
-cotacao_dolar = requisicao_dic["USDBRL"]["bid"]
-cotacao_euro = requisicao_dic["EURBRL"]["bid"]
-cotacao_cny = requisicao_dic["CNYBRL"]["bid"]
+tabela = pd.read_excel("planilha_carteira.xlsx")
+contador = 0
+for moeda_usada in df_moeda["Moeda"]:
+    tabela.loc[contador, "Cotação"] = float(requisicao_dic[f"{moeda_usada}BRL"]["bid"])
+    contador+=1
 
-tabela = pd.read_excel("carteira.xlxs")
-tabela.loc[0, "Cotação"] = float(cotacao_dolar)
-tabela.loc[1, "Cotação"] = float(cotacao_euro)
-tabela.loc[2, "Cotação"] = float(cotacao_cny)
-tabela.to_excel("carteira.xlxs", index=False)
-#print(f"Cotação atualizada. {datetime.now()}")
+tabela.to_excel("planilha_carteira.xlsx", index=False)
+print(f"Cotação atualizada. {datetime.now()}")
 

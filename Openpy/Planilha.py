@@ -122,12 +122,12 @@ sheet_1 = wb.active
 sheet_1.title = "Carteira"
 #tabela de ações
 sheet_1["A1"] = "Ações"
-sheet_1.merged_cells("A1:B1")
+sheet_1.merge_cells("A1:B1")
 sheet_1["A2"] = "Ação"
 sheet_1["B2"] = "Quantidade"
 #inserindo dados na coluna ações
 cont_acoes = 3
-for nome_acao in df_acoes["Ações"]:
+for nome_acao in df_acoes["Ação"]:
     sheet_1[f"A{cont_acoes}"] = f"{nome_acao}"
     cont_acoes+=1
 #inserindo dados na coluna quantidade
@@ -138,20 +138,25 @@ for quant_acao in df_acoes["Quantidade"]:
 
 #tabela de moedas
 sheet_1["C1"] = "Moedas"
-sheet_1.merged_cells("C1:F1")
+sheet_1.merge_cells("C1:F1")
 sheet_1["C2"] = "Moeda"
 sheet_1["D2"] = "Quantidade por tipo"
 sheet_1["E2"] = "Cotação"
 sheet_1["F2"] = "Valor"
 #inserindo dados na coluna ações
 cont_moeda = 3
-for nome_moeda in df_moeda["Moedas"]:
+for nome_moeda in df_moeda["Moeda"]:
     sheet_1[f"C{cont_moeda}"] = f"{nome_moeda}"
     cont_moeda+=1
 #inserindo dados na coluna quantidade
 cont_quant_tipo = 3
-for quant_moeda in df_acoes["Quantidade por tipo"]:
+for quant_moeda in df_moeda["Quantidade por tipo"]:
     sheet_1[f"D{cont_quant_tipo}"] = f"{quant_moeda}"
     sheet_1[f"E{cont_quant_tipo}"] = f"{2}"
     sheet_1[f"F{cont_quant_tipo}"] = f"{3}"
     cont_quant_tipo+=1
+
+
+print(type(sheet_1))
+#Salvando planilha
+wb.save("planilha_carteira.xlsx")
