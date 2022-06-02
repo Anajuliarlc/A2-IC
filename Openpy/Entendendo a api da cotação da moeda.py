@@ -8,7 +8,7 @@ import requests #Biblioteca para extrair uma URL
 
 #WebScraping
 #Url do html
-url = "https://atronee.github.io/A2-IC-Python/"
+url = "https://anajuliarlc.github.io/Trabalho-de-IC/sitecar/carteira%201"
 # Obtendo o conteúdo da página em formato de texto
 
 data = requests.get(url).text
@@ -80,11 +80,18 @@ requisecao = requests.get(f"https://economia.awesomeapi.com.br/last/{adicao_url}
 
 requisicao_dic = requisecao.json()
 tabela = pd.read_excel("planilha_carteira.xlsx")
+print(tabela)
 contador = 0
-for moeda_usada in df_moeda["Moeda"]:
-    tabela.loc[contador, "Cotação"] = float(requisicao_dic[f"{moeda_usada}BRL"]["bid"])
-    contador+=1
+cont_quant_tipo = 3
 
+for moeda_usada in df_moeda["Moeda"]:
+    tabela["Unnamed: 4"][f"{cont_quant_tipo}"] = float(requisicao_dic[f"{moeda_usada}BRL"]["bid"])
+    contador+=1
+    cont_quant_tipo+=1
 tabela.to_excel("planilha_carteira.xlsx", index=False)
 print(f"Cotação atualizada. {datetime.now()}")
-
+print(tabela)
+print(type(tabela))
+print(type(df_moeda))
+print(type(requisicao_dic))
+print(requisicao_dic)

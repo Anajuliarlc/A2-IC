@@ -7,7 +7,7 @@ import requests #Biblioteca para extrair uma URL
 
 #WebScraping
 #Url do html
-url = "https://zuilhose.github.io/A2-Intro-Comp/"
+url = "https://anajuliarlc.github.io/Trabalho-de-IC/sitecar/carteira%201"
 # Obtendo o conteúdo da página em formato de texto
 
 data = requests.get(url).text
@@ -152,7 +152,7 @@ for nome_moeda in df_moeda["Moeda"]:
 cont_quant_tipo = 3
 for quant_moeda in df_moeda["Quantidade por tipo"]:
     sheet_1[f"D{cont_quant_tipo}"] = f"{quant_moeda}"
-    sheet_1[f"E{cont_quant_tipo}"] = f"{2}"
+    sheet_1[f"E{cont_quant_tipo}"] = f"{1}"
     sheet_1[f"F{cont_quant_tipo}"] = f"{3}"
     cont_quant_tipo+=1
 
