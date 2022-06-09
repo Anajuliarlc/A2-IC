@@ -112,7 +112,7 @@ dic_acao = {}
 cont_dic_acao = 0
 for acao in df_acoes["Ação"]:
     quantidade_acao = df_acoes["Quantidade"][cont_dic_acao]
-    dic_acao[f"Ação_{cont_dic_acao}"] = [f"{acao}",f"{quantidade_acao}"]
+    dic_acao[f"{acao}"] = f"{quantidade_acao}"
     cont_dic_acao+=1
 print(dic_acao)
 
@@ -120,7 +120,7 @@ dic_moeda= {}
 cont_dic_moeda = 0
 for moeda in df_moeda["Moeda"]:
     quantidade_moeda = df_moeda["Quantidade por tipo"][cont_dic_moeda]
-    dic_moeda[f"Moeda_{cont_dic_moeda}"] = [f"{moeda}",f"{quantidade_moeda}"]
+    dic_moeda[f"{moeda}"] = f"{quantidade_moeda}"
     cont_dic_moeda+=1
 print(dic_moeda)
 print(df_moeda)
