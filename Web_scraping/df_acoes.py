@@ -60,4 +60,13 @@ df_acoes = df_acoes.astype({"Quantidade": float})
 df_acoes.head(num_linhas_acoes)
 
 print(df_acoes.head(num_linhas_acoes))
+print(type(df_acoes.head(num_linhas_acoes)))
+print(type(df_acoes))
+print(df_acoes["Ação"])
+dic_acao = {}
+cont_dic = 0
+for acao in df_acoes["Ação"]:
+    dic_acao[f"Ação_{cont_dic}"] = f"{acao}"
+    cont_dic+=1
+print(dic_acao)
 
