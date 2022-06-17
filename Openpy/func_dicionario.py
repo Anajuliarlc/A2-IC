@@ -118,7 +118,7 @@ def achar_carteira_dic(url_carteira):
         quantidade_acao = df_acoes["Quantidade"][cont_dic_acao]
         dic_acao[f"{acao}"] = f"{quantidade_acao}"
         cont_dic_acao += 1
-    
+
 
     dic_moeda = {}
     cont_dic_moeda = 0
