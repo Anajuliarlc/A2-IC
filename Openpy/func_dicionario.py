@@ -127,7 +127,8 @@ def achar_carteira_dic(url_carteira):
         dic_moeda[f"{moeda}"] = f"{quantidade_moeda}"
         cont_dic_moeda += 1
     dic_moeda_acao = {"Ação": dic_acao, "Moeda": dic_moeda}
-    return dic_moeda_acao
+
+    return [dic_moeda_acao, df_moedas, df_acoes]
 
 print(achar_carteira_dic("https://atronee.github.io/A2-IC-Python/"))
 

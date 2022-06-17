@@ -1,6 +1,4 @@
 import openpyxl
-import numpy as np
-import requests #Biblioteca para extrair uma URL
 from bs4 import BeautifulSoup #Biblioteca para achar tags html, depois vamos colocar num dataframe do pandas
 import pandas as pd #Biblioteca para guardar data frame
 import requests #Biblioteca para extrair uma URL
@@ -160,3 +158,4 @@ for quant_moeda in df_moeda["Quantidade por tipo"]:
 print(type(sheet_1))
 #Salvando planilha
 wb.save("planilha_carteira.xlsx")
+
