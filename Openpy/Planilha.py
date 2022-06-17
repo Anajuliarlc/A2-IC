@@ -1,6 +1,4 @@
 import openpyxl
-import numpy as np
-import requests #Biblioteca para extrair uma URL
 from bs4 import BeautifulSoup #Biblioteca para achar tags html, depois vamos colocar num dataframe do pandas
 import pandas as pd #Biblioteca para guardar data frame
 import requests #Biblioteca para extrair uma URL
