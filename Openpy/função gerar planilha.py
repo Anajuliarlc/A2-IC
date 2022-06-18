@@ -131,9 +131,6 @@ def achar_carteira_dic(url_carteira):
 
     return [dic_moeda_acao, df_moedas, df_acoes]
 
-achar_carteira_dic("https://atronee.github.io/A2-IC-Python/")
-
-
 
 def gerar_planilha_carteira(url_carteira):
     df_acao = achar_carteira_dic(url_carteira)[2]
@@ -154,6 +151,7 @@ def gerar_planilha_carteira(url_carteira):
     cont_acoes = 3
     for nome_acao in df_acao["Ação"]:
         sheet_1[f"A{cont_acoes}"] = f"{nome_acao}"
+        #pintar essa célula sheet_1[f"A{cont_acoes}"]
         cont_acoes += 1
     # inserindo dados na coluna quantidade
     cont_quant = 3
