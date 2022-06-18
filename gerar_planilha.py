@@ -1,7 +1,13 @@
-import yfinance as yf
+import openpyxl #Biblioteca para criar a planilha do excel e editá-la
 from bs4 import BeautifulSoup #Biblioteca para achar tags html, depois vamos colocar num dataframe do pandas
 import pandas as pd #Biblioteca para guardar data frame
 import requests #Biblioteca para extrair uma URL
+from openpyxl.styles import (
+    Alignment,
+    PatternFill,
+    Font,
+    colors
+) #Biblioteca para estilizar a tabela do excel
 
 def achar_carteira_dic(url_carteira):
     # WebScraping
@@ -130,99 +136,109 @@ def achar_carteira_dic(url_carteira):
     dic_moeda_acao = {"Ação": dic_acao, "Moeda": dic_moeda}
 
     return [dic_moeda_acao, df_moedas, df_acoes]
-#função para tirar essa *** de BRL=X que mandaram deixar na carteira (era só mudar na função)
-def tire_brl_x(moeda):
-    if moeda == "BRL":
-        moeda ="BRL"
-    elif moeda == "BRLBRL=X":
-        moeda == "BRL"
-    elif moeda == "BRL=X":
-        moeda == "BRL"
-    elif "BRL=X" in moeda is False:
-        moeda = moeda
-    else:
-        # deixando normal a moeda
-        letra_moeda = len(moeda)
-        # tirando BRL=X
-        num_letra_moeda = letra_moeda - 5
-        # moeda sem BRL=X
-        moeda = moeda[0:num_letra_moeda]
-    return moeda
 
-def cotacao_acao(url_carteira):
+#testando a função
+achar_carteira_dic("https://atronee.github.io/A2-IC-Python/")
+
+
+
+def gerar_planilha_carteira(url_carteira):
     df_acao = achar_carteira_dic(url_carteira)[2]
-    dic_acao_cot = {}
-    for acao in df_acao["Ação"]:
-        #checando se a ação existe
-        if yf.Ticker(f"{acao}") == None:
-            dic_acao_cot[f"{acao}"] = "Ação não encontrada"
-        else:
-            ticker = yf.Ticker(f"{acao}")
-            #diz em que moeda está a ação
-            moeda_acao = ticker.info['currency']
-            #diz o valor da ação em sua moeda
-            valor_acao = ticker.info["regularMarketPrice"]
-            if moeda_acao != "BRL":
-                moeda_acao_real = moeda_acao + "BRL=X"
-                moeda_acao_real = yf.Ticker(moeda_acao_real)
-                #Valor da moeda da ação em real
-                valor_moeda_acao = moeda_acao_real.info["regularMarketPrice"]
-                #Valor da ação em real
-                valor_acao = valor_acao*valor_moeda_acao
-                dic_acao_cot[f"{acao}"] = valor_acao
-            else:
-                valor_acao = ticker.info["regularMarketPrice"]
-                dic_acao_cot[f"{acao}"] = valor_acao
-    return dic_acao_cot
-
-def valor_total_acao(url_carteira):
-    df_acao = achar_carteira_dic(url_carteira)[0]["Ação"]
-    dic = cotacao_acao(url_carteira)
-    dic_val_tot_acao = {}
-    for k,v in dic.items():
-        dic_val_tot_acao[k] = v*float(df_acao[k])
-    return dic_val_tot_acao
-
-def cotacao_moeda(url_carteira):
     df_moeda = achar_carteira_dic(url_carteira)[1]
-    dic_moeda_cot = {}
-    for moeda in df_moeda["Moeda"]:
-        if yf.Ticker(f"{moeda}") == None:
-            dic_moeda_cot[f"{moeda}"] = "Moeda não encontrada"
-        elif moeda == "BRL=X":
-            dic_moeda_cot["BRL"] = 1
-        elif moeda == "BRL":
-            dic_moeda_cot["BRL"] = 1
-        elif moeda == "BRLBRL=X":
-            dic_moeda_cot["BRL"] = 1
-        if "BRL=X" in moeda is False:
-            dic_moeda_cot[f"{moeda}"] = yf.Ticker(moeda + "BRL=X").info["regularMarketPrice"]
-        else:
-            #deixando normal a moeda
-            letra_moeda = len(moeda)
-            #tirando BRL=X
-            num_letra_moeda = letra_moeda - 5
-            #moeda sem BRL=X
-            moeda_normal = moeda[0:num_letra_moeda]
-            dic_moeda_cot[f"{moeda_normal}"] = yf.Ticker(moeda).info["regularMarketPrice"]
+    # Criando planilha
+    # Criando folha da carteira
+    wb = openpyxl.Workbook()
+    sheet_1 = wb.active
+    sheet_1.title = "Carteira"
+
+    # tabela de ações
+    sheet_1.merge_cells("A1:D1")
+    cell_1 = sheet_1.cell(row=1, column=1)
+    cell_1.value = "Ação"
+    #Estilizando a tabela de ações
+    cell_1.alignment = Alignment(horizontal="center", vertical="center")
+    sheet_1["A2"] = "Ação"
+    sheet_1["B2"] = "Quantidade"
+    sheet_1["C2"] = "Cotação da ação"
+    sheet_1["D2"] = "Valor atual total ação"
+
+    sheet_1["A2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["B2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["C2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["D2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+
+    sheet_1["A1"].fill = PatternFill(start_color = "574fe3", end_color="574fe3", fill_type="solid")
+    sheet_1["A1"].font = Font(size=14, color=colors.WHITE, bold=True)
+
+    # inserindo dados na coluna ações
+    cont_acoes = 3
+    for nome_acao in df_acao["Ação"]:
+        sheet_1[f"A{cont_acoes}"] = f"{nome_acao}"
+        sheet_1[f"A{cont_acoes}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        cont_acoes += 1
+    # inserindo dados na coluna quantidade
+    cont_quant = 3
+    for quant_acao in df_acao["Quantidade"]:
+        sheet_1[f"B{cont_quant}"] = f"{quant_acao}"
+        sheet_1[f"C{cont_quant}"] = f"{1}"
+        sheet_1[f"D{cont_quant}"] = f"{3}"
+        #Colorindo as células da tabela de ação
+        sheet_1[f"B{cont_quant}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        sheet_1[f"C{cont_quant}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        sheet_1[f"D{cont_quant}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        cont_quant += 1
+
+    # tabela de moedas
+    sheet_1.merge_cells("E1:H1")
+    cell_2 = sheet_1.cell(row=1, column=5)
+    cell_2.value = "Moeda"
+    # Estilizando a tabela de ações
+    cell_2.alignment = Alignment(horizontal="center", vertical="center")
+    sheet_1["E2"] = "Moeda"
+    sheet_1["F2"] = "Quantidade por tipo"
+    sheet_1["G2"] = "Cotação"
+    sheet_1["H2"] = "Valor"
+
+    sheet_1["E2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["F2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["G2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["H2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
 
 
-    return dic_moeda_cot
+    sheet_1["E1"].fill = PatternFill(start_color="574fe3", end_color="574fe3", fill_type="solid")
+    sheet_1["E1"].font = Font(size=14, color=colors.WHITE, bold=True)
 
-def valor_total_moeda(url_carteira):
-    df_moeda = achar_carteira_dic(url_carteira)[0]["Moeda"]
-    #mudando chave do dicionário
-    chaves_novas = {}
-    for k,v in df_moeda.items():
-        chaves_novas[k] = tire_brl_x(k)
-        #Deculpa por usar esse negócio horrendo por favor não tire pontos
-    df_moeda_normal = dict([(chaves_novas.get(key), value) for key, value in df_moeda.items()])
-    dic = cotacao_moeda(url_carteira)
-    dic_val_tot_moeda = {}
-    for k,v in dic.items():
-        dic_val_tot_moeda[k] = v*float(df_moeda_normal[k])
-    return dic_val_tot_moeda
+    # inserindo dados na coluna ações
+    cont_moeda = 3
+    for nome_moeda in df_moeda["Moeda"]:
+        sheet_1[f"E{cont_moeda}"] = f"{nome_moeda}"
+        sheet_1[f"E{cont_moeda}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        cont_moeda += 1
+    # inserindo dados na coluna quantidade
+    cont_quant_tipo = 3
+    for quant_moeda in df_moeda["Quantidade por tipo"]:
+        sheet_1[f"F{cont_quant_tipo}"] = f"{quant_moeda}"
+        sheet_1[f"G{cont_quant_tipo}"] = f"{1}"
+        sheet_1[f"H{cont_quant_tipo}"] = f"{3}"
+        # Colorindo as células da tabela de ação
+        sheet_1[f"F{cont_quant_tipo}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        sheet_1[f"G{cont_quant_tipo}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        sheet_1[f"H{cont_quant_tipo}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        cont_quant_tipo += 1
 
+    #Definindo o tamanho das células
+    sheet_1.column_dimensions["A"].width = 15
+    sheet_1.column_dimensions["B"].width = 15
+    sheet_1.column_dimensions["C"].width = 15
+    sheet_1.column_dimensions["D"].width = 15
+    sheet_1.column_dimensions["E"].width = 15
+    sheet_1.column_dimensions["F"].width = 20
+    sheet_1.column_dimensions["G"].width = 15
+    sheet_1.column_dimensions["H"].width = 15
 
+    #Salvando a planilha
+    planilha = wb.save("planilha_carteira.xlsx")
+    return planilha
 
-
+#testando a função
+gerar_planilha_carteira("https://anajuliarlc.github.io/Trabalho-de-IC/sitecar/carteira%201")

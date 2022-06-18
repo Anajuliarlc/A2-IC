@@ -1,4 +1,3 @@
-import yfinance as yf
 from bs4 import BeautifulSoup #Biblioteca para achar tags html, depois vamos colocar num dataframe do pandas
 import pandas as pd #Biblioteca para guardar data frame
 import requests #Biblioteca para extrair uma URL
@@ -130,99 +129,6 @@ def achar_carteira_dic(url_carteira):
     dic_moeda_acao = {"Ação": dic_acao, "Moeda": dic_moeda}
 
     return [dic_moeda_acao, df_moedas, df_acoes]
-#função para tirar essa *** de BRL=X que mandaram deixar na carteira (era só mudar na função)
-def tire_brl_x(moeda):
-    if moeda == "BRL":
-        moeda ="BRL"
-    elif moeda == "BRLBRL=X":
-        moeda == "BRL"
-    elif moeda == "BRL=X":
-        moeda == "BRL"
-    elif "BRL=X" in moeda is False:
-        moeda = moeda
-    else:
-        # deixando normal a moeda
-        letra_moeda = len(moeda)
-        # tirando BRL=X
-        num_letra_moeda = letra_moeda - 5
-        # moeda sem BRL=X
-        moeda = moeda[0:num_letra_moeda]
-    return moeda
 
-def cotacao_acao(url_carteira):
-    df_acao = achar_carteira_dic(url_carteira)[2]
-    dic_acao_cot = {}
-    for acao in df_acao["Ação"]:
-        #checando se a ação existe
-        if yf.Ticker(f"{acao}") == None:
-            dic_acao_cot[f"{acao}"] = "Ação não encontrada"
-        else:
-            ticker = yf.Ticker(f"{acao}")
-            #diz em que moeda está a ação
-            moeda_acao = ticker.info['currency']
-            #diz o valor da ação em sua moeda
-            valor_acao = ticker.info["regularMarketPrice"]
-            if moeda_acao != "BRL":
-                moeda_acao_real = moeda_acao + "BRL=X"
-                moeda_acao_real = yf.Ticker(moeda_acao_real)
-                #Valor da moeda da ação em real
-                valor_moeda_acao = moeda_acao_real.info["regularMarketPrice"]
-                #Valor da ação em real
-                valor_acao = valor_acao*valor_moeda_acao
-                dic_acao_cot[f"{acao}"] = valor_acao
-            else:
-                valor_acao = ticker.info["regularMarketPrice"]
-                dic_acao_cot[f"{acao}"] = valor_acao
-    return dic_acao_cot
-
-def valor_total_acao(url_carteira):
-    df_acao = achar_carteira_dic(url_carteira)[0]["Ação"]
-    dic = cotacao_acao(url_carteira)
-    dic_val_tot_acao = {}
-    for k,v in dic.items():
-        dic_val_tot_acao[k] = v*float(df_acao[k])
-    return dic_val_tot_acao
-
-def cotacao_moeda(url_carteira):
-    df_moeda = achar_carteira_dic(url_carteira)[1]
-    dic_moeda_cot = {}
-    for moeda in df_moeda["Moeda"]:
-        if yf.Ticker(f"{moeda}") == None:
-            dic_moeda_cot[f"{moeda}"] = "Moeda não encontrada"
-        elif moeda == "BRL=X":
-            dic_moeda_cot["BRL"] = 1
-        elif moeda == "BRL":
-            dic_moeda_cot["BRL"] = 1
-        elif moeda == "BRLBRL=X":
-            dic_moeda_cot["BRL"] = 1
-        if "BRL=X" in moeda is False:
-            dic_moeda_cot[f"{moeda}"] = yf.Ticker(moeda + "BRL=X").info["regularMarketPrice"]
-        else:
-            #deixando normal a moeda
-            letra_moeda = len(moeda)
-            #tirando BRL=X
-            num_letra_moeda = letra_moeda - 5
-            #moeda sem BRL=X
-            moeda_normal = moeda[0:num_letra_moeda]
-            dic_moeda_cot[f"{moeda_normal}"] = yf.Ticker(moeda).info["regularMarketPrice"]
-
-
-    return dic_moeda_cot
-
-def valor_total_moeda(url_carteira):
-    df_moeda = achar_carteira_dic(url_carteira)[0]["Moeda"]
-    #mudando chave do dicionário
-    chaves_novas = {}
-    for k,v in df_moeda.items():
-        chaves_novas[k] = tire_brl_x(k)
-        #Deculpa por usar esse negócio horrendo por favor não tire pontos
-    df_moeda_normal = dict([(chaves_novas.get(key), value) for key, value in df_moeda.items()])
-    dic = cotacao_moeda(url_carteira)
-    dic_val_tot_moeda = {}
-    for k,v in dic.items():
-        dic_val_tot_moeda[k] = v*float(df_moeda_normal[k])
-    return dic_val_tot_moeda
-
-
-
+print(achar_carteira_dic("https://atronee.github.io/A2-IC-Python/"))
 
