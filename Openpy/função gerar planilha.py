@@ -1,7 +1,13 @@
-import openpyxl
+import openpyxl #Biblioteca para criar a planilha do excel e editá-la
 from bs4 import BeautifulSoup #Biblioteca para achar tags html, depois vamos colocar num dataframe do pandas
 import pandas as pd #Biblioteca para guardar data frame
 import requests #Biblioteca para extrair uma URL
+from openpyxl.styles import (
+    Alignment,
+    PatternFill,
+    Font,
+    colors,
+) #Biblioteca para estilizar a tabela do excel
 
 def achar_carteira_dic(url_carteira):
     # WebScraping
@@ -131,6 +137,7 @@ def achar_carteira_dic(url_carteira):
 
     return [dic_moeda_acao, df_moedas, df_acoes]
 
+#testando a função
 achar_carteira_dic("https://atronee.github.io/A2-IC-Python/")
 
 
@@ -143,17 +150,31 @@ def gerar_planilha_carteira(url_carteira):
     wb = openpyxl.Workbook()
     sheet_1 = wb.active
     sheet_1.title = "Carteira"
+
     # tabela de ações
-    sheet_1["A1"] = "Ações"
     sheet_1.merge_cells("A1:D1")
+    cell_1 = sheet_1.cell(row=1, column=1)
+    cell_1.value = "Ação"
+    #Estilizando a tabela de ações
+    cell_1.alignment = Alignment(horizontal="center", vertical="center")
     sheet_1["A2"] = "Ação"
     sheet_1["B2"] = "Quantidade"
     sheet_1["C2"] = "Cotação da ação"
     sheet_1["D2"] = "Valor atual total ação"
+
+    sheet_1["A2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["B2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["C2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["D2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+
+    sheet_1["A1"].fill = PatternFill(start_color = "574fe3", end_color="574fe3", fill_type="solid")
+    sheet_1["A1"].font = Font(size=14, color=colors.WHITE, bold=True)
+
     # inserindo dados na coluna ações
     cont_acoes = 3
     for nome_acao in df_acao["Ação"]:
         sheet_1[f"A{cont_acoes}"] = f"{nome_acao}"
+        sheet_1[f"A{cont_acoes}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
         cont_acoes += 1
     # inserindo dados na coluna quantidade
     cont_quant = 3
@@ -161,19 +182,37 @@ def gerar_planilha_carteira(url_carteira):
         sheet_1[f"B{cont_quant}"] = f"{quant_acao}"
         sheet_1[f"C{cont_quant}"] = f"{1}"
         sheet_1[f"D{cont_quant}"] = f"{3}"
+        #Colorindo as células da tabela de ação
+        sheet_1[f"B{cont_quant}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        sheet_1[f"C{cont_quant}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        sheet_1[f"D{cont_quant}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
         cont_quant += 1
 
     # tabela de moedas
-    sheet_1["E1"] = "Moedas"
     sheet_1.merge_cells("E1:H1")
+    cell_2 = sheet_1.cell(row=1, column=5)
+    cell_2.value = "Moeda"
+    # Estilizando a tabela de ações
+    cell_2.alignment = Alignment(horizontal="center", vertical="center")
     sheet_1["E2"] = "Moeda"
     sheet_1["F2"] = "Quantidade por tipo"
     sheet_1["G2"] = "Cotação"
     sheet_1["H2"] = "Valor"
+
+    sheet_1["E2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["F2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["G2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+    sheet_1["H2"].fill = PatternFill(start_color="38b2eb", end_color="38b2eb", fill_type="solid")
+
+
+    sheet_1["E1"].fill = PatternFill(start_color="574fe3", end_color="574fe3", fill_type="solid")
+    sheet_1["E1"].font = Font(size=14, color=colors.WHITE, bold=True)
+
     # inserindo dados na coluna ações
     cont_moeda = 3
     for nome_moeda in df_moeda["Moeda"]:
         sheet_1[f"E{cont_moeda}"] = f"{nome_moeda}"
+        sheet_1[f"E{cont_moeda}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
         cont_moeda += 1
     # inserindo dados na coluna quantidade
     cont_quant_tipo = 3
@@ -181,9 +220,25 @@ def gerar_planilha_carteira(url_carteira):
         sheet_1[f"F{cont_quant_tipo}"] = f"{quant_moeda}"
         sheet_1[f"G{cont_quant_tipo}"] = f"{1}"
         sheet_1[f"H{cont_quant_tipo}"] = f"{3}"
+        # Colorindo as células da tabela de ação
+        sheet_1[f"F{cont_quant_tipo}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        sheet_1[f"G{cont_quant_tipo}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
+        sheet_1[f"H{cont_quant_tipo}"].fill = PatternFill(start_color="b6e2fa", end_color="b6e2fa", fill_type="solid")
         cont_quant_tipo += 1
-    # Salvando planilha
+
+    #Definindo o tamanho das células
+    sheet_1.column_dimensions["A"].width = 15
+    sheet_1.column_dimensions["B"].width = 15
+    sheet_1.column_dimensions["C"].width = 15
+    sheet_1.column_dimensions["D"].width = 15
+    sheet_1.column_dimensions["E"].width = 15
+    sheet_1.column_dimensions["F"].width = 20
+    sheet_1.column_dimensions["G"].width = 15
+    sheet_1.column_dimensions["H"].width = 15
+
+    #Salvando a planilha
     planilha = wb.save("planilha_carteira.xlsx")
     return planilha
 
+#testando a função
 gerar_planilha_carteira("https://anajuliarlc.github.io/Trabalho-de-IC/sitecar/carteira%201")
