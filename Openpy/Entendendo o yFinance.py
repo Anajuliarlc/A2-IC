@@ -2,7 +2,7 @@ import yfinance as yf
 from bs4 import BeautifulSoup #Biblioteca para achar tags html, depois vamos colocar num dataframe do pandas
 import pandas as pd #Biblioteca para guardar data frame
 import requests #Biblioteca para extrair uma URL
-
+import datetime
 def achar_carteira_dic(url_carteira):
     # WebScraping
     # Url do html
@@ -222,6 +222,17 @@ def valor_total_moeda(url_carteira):
     for k,v in dic.items():
         dic_val_tot_moeda[k] = v*float(df_moeda_normal[k])
     return dic_val_tot_moeda
+
+
+hoje = datetime.date.today()
+hist = yf.Ticker("LMT").history(period="10y")
+#print(hist)
+historico = yf.Ticker("LMT").history(period=f"{hoje}")
+print(historico)
+
+
+
+
 
 
 
