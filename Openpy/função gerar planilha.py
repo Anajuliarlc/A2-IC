@@ -6,7 +6,7 @@ from openpyxl.styles import (
     Alignment,
     PatternFill,
     Font,
-    colors,
+    colors
 ) #Biblioteca para estilizar a tabela do excel
 
 def achar_carteira_dic(url_carteira):
