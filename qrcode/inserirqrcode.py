@@ -50,5 +50,3 @@ def colocar_qrcode(nome_arquivo, numcarteira):
     carteira.add_image(imagem, celula)
     # Salva a planilha
     planilha.save(nome_arquivo)
-
-colocar_qrcode("teste.xlsx", 3)
